@@ -40,7 +40,7 @@ include 'config.php';
                                         </div>
                                         <div class="modal-body">
                                             <!--------------------------------------main form ---------------------------------------------------->
-                                            <form action="#" method="POST">
+                                            <form action="index.php" method="POST">
                                                 <div class="d-flex justify-content-end">
                                                     <input class="form-control" type="text" id="taskID"
                                                         style="width:5rem;" readonly>
@@ -50,7 +50,7 @@ include 'config.php';
                                                     <textarea type="text" class="form-control" name="task" id="task"
                                                         rows="3"></textarea>
                                                 </div>
-                                                <input type="submit" class="btn btn-primary" value="Submit"
+                                                <input type="submit" class="btn btn-primary" name="addTask" value="Submit"
                                                     onclick='alert("Task Added")'>
                                             </form>
                                             <!--------------------------------------end of main form ---------------------------------------------------->
@@ -70,9 +70,23 @@ include 'config.php';
                                                 <th>ID</th>
                                                 <th>Task</th>
                                                 <th>Date</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php
+                                                $query = "SELECT * FROM todo ORDER BY id ASC";
+                                                $result = mysqli_query($conn, $query);
+                                            ?>
+                                            <?php if (mysqli_num_rows($result) > 0) {
+                                                    while($row = mysqli_fetch_assoc($result)) {?>
+                                                    <tr>
+                                                        <td><?php echo $row['id'] ?> </td>
+                                                        <td><?php echo $row['task'] ?> </td>
+                                                        <td><?php echo $row['date'] ?> </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -86,4 +100,12 @@ include 'config.php';
     </div>
 </body>
 
+<?php 
+if(isset($_POST['addTask'])){
+    $task=$_POST['task'];
+
+    $query = "INSERT INTO todo (task, date) VALUES ('$task', NOW())";
+    $result = mysqli_query($conn, $query);
+}
+?>
 </html>
