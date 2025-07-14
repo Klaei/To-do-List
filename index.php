@@ -1,5 +1,15 @@
 <?php
 include 'config.php';
+
+if(isset($_POST['addTask'])){
+    $task=$_POST['task'];
+
+    $query = "INSERT INTO todo (task, date) VALUES ('$task', NOW())";
+    $result = mysqli_query($conn, $query);
+
+    header("Location: index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -8,6 +18,7 @@ include 'config.php';
     <title>A blog application</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-icons-1.13.1/bootstrap-icons.css">
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <style>
@@ -79,16 +90,19 @@ include 'config.php';
                                                 $result = mysqli_query($conn, $query);
                                             ?>
                                             <?php if (mysqli_num_rows($result) > 0) {
-                                                    while($row = mysqli_fetch_assoc($result)) {?>
+                                                while($row = mysqli_fetch_assoc($result)) {?>
                                                     <tr>
                                                         <td><?php echo $row['id'] ?> </td>
                                                         <td><?php echo $row['task'] ?> </td>
                                                         <td><?php echo $row['date'] ?> </td>
+                                                        <form action="index.php" method="post">
+                                                            <td><button type="submit" class="btn btn-primary" name="delete" ><i class="bi bi-trash"></i></button></td>
+                                                        </form>
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
                                         </tbody>
-                                    </table>
+                                    </table>    
                                 </div>
                             </div>
                         </div>
@@ -99,13 +113,4 @@ include 'config.php';
         </div>
     </div>
 </body>
-
-<?php 
-if(isset($_POST['addTask'])){
-    $task=$_POST['task'];
-
-    $query = "INSERT INTO todo (task, date) VALUES ('$task', NOW())";
-    $result = mysqli_query($conn, $query);
-}
-?>
 </html>
