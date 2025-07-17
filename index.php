@@ -1,7 +1,8 @@
 <?php
 include 'config.php';
 
-if(isset($_POST['addTask'])){
+//add logic
+if(isset($_POST['addTask'])) {
     $task=$_POST['task'];
 
     $query = "INSERT INTO todo (task, date) VALUES ('$task', NOW())";
@@ -10,12 +11,24 @@ if(isset($_POST['addTask'])){
     header("Location: index.php");
     exit();
 }
+
+// Delete Logic
+if(isset($_POST['delete'])) {
+    $id = intval($_POST['delete']);
+
+    $query = "DELETE FROM todo WHERE id=$id";
+    $result = mysqli_query($conn, $query);
+
+    header("Location: index.php");
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>A blog application</title>
+    <title>To Do List</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-icons-1.13.1/bootstrap-icons.css">
@@ -52,10 +65,6 @@ if(isset($_POST['addTask'])){
                                         <div class="modal-body">
                                             <!--------------------------------------main form ---------------------------------------------------->
                                             <form action="index.php" method="POST">
-                                                <div class="d-flex justify-content-end">
-                                                    <input class="form-control" type="text" id="taskID"
-                                                        style="width:5rem;" readonly>
-                                                </div>
                                                 <div class="mb-3">
                                                     <label for="task">Enter task you want to add:</label>
                                                     <textarea type="text" class="form-control" name="task" id="task"
@@ -75,7 +84,7 @@ if(isset($_POST['addTask'])){
                         <div class="container mt-3">
                             <div class="row">
                                 <div class="col">
-                                    <table class="table table-striped text-white text-center">
+                                    <table class="table table-responsive table-sm table-striped text-white text-center">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -95,9 +104,11 @@ if(isset($_POST['addTask'])){
                                                         <td><?php echo $row['id'] ?> </td>
                                                         <td><?php echo $row['task'] ?> </td>
                                                         <td><?php echo $row['date'] ?> </td>
-                                                        <form action="index.php" method="post">
-                                                            <td><button type="submit" class="btn btn-primary" name="delete" ><i class="bi bi-trash"></i></button></td>
-                                                        </form>
+                                                        <td>
+                                                            <form action="index.php" method="post">
+                                                                <button type="submit" class="btn btn-danger" name="delete" value="<?= $row['id']?>" onclick="deleteWarning()"><i class="bi bi-trash"></i></button>
+                                                            </form>
+                                                        </td>
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
@@ -114,3 +125,9 @@ if(isset($_POST['addTask'])){
     </div>
 </body>
 </html>
+
+<script>
+    function deleteWarning(){
+        alert("Are you sure you want to delete? ");
+    }
+</script>
