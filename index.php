@@ -5,8 +5,14 @@ include 'config.php';
 if(isset($_POST['addTask'])) {
     $task=$_POST['task'];
 
-    $query = "INSERT INTO todo (task, date) VALUES ('$task', NOW())";
-    $result = mysqli_query($conn, $query);
+    if(!empty($_POST['task'])){
+        $query = "INSERT INTO todo (task, date) VALUES ('$task', NOW())";
+        $result = mysqli_query($conn, $query);
+    }
+    else {
+        echo 
+        "Walang nakalagay";
+    }
 
     header("Location: index.php");
     exit();
@@ -70,8 +76,7 @@ if(isset($_POST['delete'])) {
                                                     <textarea type="text" class="form-control" name="task" id="task"
                                                         rows="3"></textarea>
                                                 </div>
-                                                <input type="submit" class="btn btn-primary" name="addTask" value="Submit"
-                                                    onclick='alert("Task Added")'>
+                                                <input type="submit" class="btn btn-primary" name="addTask" value="Add" onclick="checking()">
                                             </form>
                                             <!--------------------------------------end of main form ---------------------------------------------------->
                                         </div>
@@ -129,5 +134,15 @@ if(isset($_POST['delete'])) {
 <script>
     function deleteWarning(){
         alert("Are you sure you want to delete? ");
+    }
+
+    function checking(){
+        const task = document.getElementById('task').value.trim();
+        if (task !== ""){
+            alert("Task Added");
+        }
+        else {
+            alert ("Walang laman");
+        }
     }
 </script>
