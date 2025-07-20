@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     include 'config.php';
 ?>
 
@@ -59,14 +60,16 @@
 
 
         if($pass != $conPass){
-            echo "<script>alert('The paswword doesn't match!');</script>";
+            echo "<script>alert('The paswword doesn't match!')</script>";
+            header("Location: register.php");
+            exit();
         }
         else {
             $query = "INSERT INTO accounts (`email`, `password`) VALUES ('$email', '$pass')";
             $result = mysqli_query($conn, $query);
+            header("Location: index.php");
+            exit();
         }
-        header("Location: index.php");
-        exit();
     }
 ?>
 
