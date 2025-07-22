@@ -32,6 +32,9 @@ if(isset($_POST['truncate'])) {
     $query = "TRUNCATE TABLE todo";
     $result = mysqli_query($conn, $query);
 }
+if(isset($_POST['logout'])){
+    include 'logout.php';
+}
 
 ?>
 <!DOCTYPE html>
@@ -63,7 +66,8 @@ if(isset($_POST['truncate'])) {
                             <button type="submit" class="btn btn-outline-primary text-white" name="Add" data-bs-toggle="modal"
                                 data-bs-target="#inputtask">Add to list</button>
                             <form action="" method="post">
-                                <button type="submit" class="btn btn-outline-danger  text-white" name="truncate" onclick='alert("Are you sure ypu want to truncate table?")'>Truncate</button>
+                                <button type="submit" class="btn btn-outline-warning  text-white" name="truncate" onclick='alert("Are you sure you want to truncate table?")'>Truncate</button>
+                                <button type="submit"  class="btn btn-outline-danger  text-white" name="logout" >Log Out</button>
                             </form>
                             <!--------------------------------------modal form ---------------------------------------------------->
                             <div class="modal fade" id="inputtask" tabindex="-1" aria-labelledby="exampleModalLabel"
