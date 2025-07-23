@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: index.php");
+    exit();
+}
 include 'config.php';
 
 //add logic
@@ -32,6 +36,7 @@ if(isset($_POST['truncate'])) {
     $query = "TRUNCATE TABLE todo";
     $result = mysqli_query($conn, $query);
 }
+//logout function
 if(isset($_POST['logout'])){
     include 'logout.php';
 }
@@ -65,8 +70,10 @@ if(isset($_POST['logout'])){
                         <div class="d-flex justify-content-end container mt-3 ml-2">
                             <button type="submit" class="btn btn-outline-primary text-white" name="Add" data-bs-toggle="modal"
                                 data-bs-target="#inputtask">Add to list</button>
-                            <form action="" method="post">
+                            <form action="" method="POST">
                                 <button type="submit" class="btn btn-outline-warning  text-white" name="truncate" onclick='alert("Are you sure you want to truncate table?")'>Truncate</button>
+                            </form>
+                            <form action="" method="POST">
                                 <button type="submit"  class="btn btn-outline-danger  text-white" name="logout" >Log Out</button>
                             </form>
                             <!--------------------------------------modal form ---------------------------------------------------->
@@ -81,13 +88,13 @@ if(isset($_POST['logout'])){
                                         </div>
                                         <div class="modal-body">
                                             <!--------------------------------------main form ---------------------------------------------------->
-                                            <form action="task.php" method="POST">
+                                            <form action="task.php" method="POST" onsubmit="return checking()">
                                                 <div class="mb-3">
                                                     <label for="task">Enter task you want to add:</label>
                                                     <textarea type="text" class="form-control" name="task" id="task"
                                                         rows="3"></textarea>
                                                 </div>
-                                                <input type="submit" class="btn btn-primary" name="addTask" value="Add" onclick="checking()">
+                                                <input type="submit" class="btn btn-primary" name="addTask" value="Add">
                                             </form>
                                             <!--------------------------------------end of main form ---------------------------------------------------->
                                         </div>
@@ -151,9 +158,11 @@ if(isset($_POST['logout'])){
         const task = document.getElementById('task').value.trim();
         if (task !== ""){
             alert("Task Added");
+            return true;
         }
         else {
             alert ("Walang laman");
+            return false;
         }
     }
 </script>
